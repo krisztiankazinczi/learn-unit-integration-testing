@@ -1,11 +1,12 @@
+const httpMock = require('node-mocks-http');
 const controller = require('../../controllers/employee.controller');
 const model = require('../../models/employee.model');
-const httpMock = require('node-mocks-http');
 const mockEmployees = require('../mockData/employees');
 
 model.findById = jest.fn(); //this mocks the findById mongoose function and returns undefined
 
 let req, res, next;
+
 // It will restore these object to the original value before each test. Without this in the second or third test the req and res object would not be empty req, res objects.
 beforeEach(() => {
   req = httpMock.createRequest();
@@ -51,9 +52,12 @@ describe('controller.getEmployeeById', () => {
   });
 });
 
-
 /*
 httpMock package:
 if res.send("foo") => I can get the res.send info with res._getData()
 if res.json({"foo": "foo"}) => I can get the res.json info with res._getJSONData()
 */
+
+describe("employeeController.getAllEmployees", () => {
+  
+})
