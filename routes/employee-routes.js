@@ -19,7 +19,8 @@ router.get('/employees', employeeController.getAllEmployees);
 router
   .route('/employee/:id')
   .get(employeeController.getEmployeeById)
-  .put(verifyJWToken, employeeController.updateEmployeeById)
+  // .put(verifyJWToken, employeeController.updateEmployeeById)
+  .put(employeeController.updateEmployeeById)
   .delete(employeeController.deleteEmployeeById);
 
 module.exports = router;

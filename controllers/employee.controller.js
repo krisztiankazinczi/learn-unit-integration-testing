@@ -1,7 +1,7 @@
 const employeeModel = require('../models/employee.model');
 const joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 const saltRounds = 12;
 
@@ -109,11 +109,11 @@ exports.updateEmployeeById = async (req, res, next) => {
         useFindAndModify: false
       }
     );
-
+    console.log(updatedEmployee);
     if (updatedEmployee) {
-      res.status(201).json(updatedEmployee);
+      return res.status(201).json(updatedEmployee);
     } else {
-      res.status(400).send();
+      return res.status(400).send();
     }
   } catch (error) {
     console.log(error);
