@@ -26,16 +26,16 @@ const schema = joi.object({
   phone: joi.string()
 });
 
+exports.schema = schema;
+
 exports.createEmployee = async (req, res, next) => {
   try {
     const checkBody = await schema.validate(req.body);
-    console.log(`Validation result: ${checkBody}`);
     if (checkBody.error) {
       return res.status(400).json(checkBody.error);
     }
 
     const doEmailExist = await employeeModel.findOne({ email: req.body.email });
-    console.log('doEmailExist :', doEmailExist);
     if (doEmailExist) {
       return res
         .status(400)
@@ -44,14 +44,11 @@ exports.createEmployee = async (req, res, next) => {
 
     const salt = await bcrypt.genSalt(saltRounds);
     const encryptedPassword = await bcrypt.hash(req.body.password, salt);
-    console.log(encryptedPassword);
     req.body.password = encryptedPassword;
 
     const newEmployee = await employeeModel.create(req.body);
-    console.log(newEmployee);
     res.status(201).json(newEmployee);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 };
@@ -59,7 +56,6 @@ exports.createEmployee = async (req, res, next) => {
 exports.getAllEmployees = async (req, res, next) => {
   try {
     const allEmployees = await employeeModel.find({});
-    console.log(allEmployees);
     if (allEmployees && allEmployees.length) {
       res.status(200).json(allEmployees);
     } else {
@@ -79,7 +75,6 @@ exports.getEmployeeById = async (req, res, next) => {
       res.status(404).send();
     }
   } catch (error) {
-    console.log('in catch', error);
     res.status(500).send(error);
   }
 };
@@ -109,14 +104,12 @@ exports.updateEmployeeById = async (req, res, next) => {
         useFindAndModify: false
       }
     );
-    console.log(updatedEmployee);
     if (updatedEmployee) {
       return res.status(201).json(updatedEmployee);
     } else {
       return res.status(400).send();
     }
   } catch (error) {
-    console.log(error);
     res.status(500).json(error);
   }
 };
@@ -126,10 +119,8 @@ exports.deleteEmployeeById = async (req, res, next) => {
     .findByIdAndDelete(req.params.id)
     .then(resp => {
       if (resp) {
-        console.log(resp);
         res.status(200).json(resp);
       } else {
-        console.log('User is not listed in database');
         res.status(404).json('User not found');
       }
     })
@@ -141,7 +132,6 @@ exports.login = async (req, res, next) => {
     const joiCheck = await schema.validate(req.body);
     if (joiCheck.error) return res.status(400).json(joiCheck.error);
     const employee = await employeeModel.findOne({ email: req.body.email });
-    console.log(employee);
     if (!employee) {
       return res
         .status(400)
@@ -151,7 +141,6 @@ exports.login = async (req, res, next) => {
       req.body.password,
       employee.password
     );
-    console.log('Password Validation: ', validatePassword);
     if (!validatePassword)
       return res
         .status(400)
@@ -163,11 +152,9 @@ exports.login = async (req, res, next) => {
       process.env.JWT_TOKEN_KEY,
       { expiresIn: '1h' }
     );
-    console.log(jwtToken);
     res.header('auth-token', jwtToken);
     res.status(201).json(employee);
   } catch (err) {
-    console.log(err);
     res.status(500).json(err);
   }
 };

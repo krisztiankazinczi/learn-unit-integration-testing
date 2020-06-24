@@ -6,7 +6,7 @@
   "scripts": {
     "server": "cross-env NODE_ENV=prod node app.js",
     "start": "cross-env NODE_ENV=test nodemon app.js",
-    "test": "jest --watchAll"
+    "test:unit": "jest --verbose --watchAll"
   },
   "repository": {
     "type": "git",
