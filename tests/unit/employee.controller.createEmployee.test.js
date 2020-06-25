@@ -3,7 +3,6 @@ const employeeModel = require('../../models/employee.model');
 const bcrypt = require('bcrypt');
 const httpMock = require('node-mocks-http');
 const mockEmployee = require('../mockdata/employeeReq.json');
-const joi = require('@hapi/joi');
 
 
 employeeModel.create = jest.fn();
